@@ -9,6 +9,11 @@ class DatabaseLikedPost {
   }
 
   static Stream<QuerySnapshot> filterTitle({required String title}) {
-    return tblLikedPosts.where('title', isEqualTo: title).snapshots();
+    if (title == "") {
+      return tblLikedPosts.snapshots();
+    } 
+    else {
+      return tblLikedPosts.where('title', isEqualTo: title).snapshots();
+    }
   }
 }

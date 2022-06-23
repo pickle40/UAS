@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../dataClass/dcPost.dart';
 import 'package:http/http.dart' as http;
 
-class Services {
+class Service {
   Future<List<cPost>> getAllData() async {
     final response = await http.get(
         Uri.parse('https://api-berita-indonesia.vercel.app/cnbc/terbaru/'));
@@ -14,5 +14,4 @@ class Services {
       throw Exception('Failed to Load Data');
     }
   }
-
 }
