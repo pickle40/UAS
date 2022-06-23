@@ -1,3 +1,4 @@
+import 'package:c14190003_01/dataClass/dcPost.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 CollectionReference tblLikedPosts =
@@ -11,9 +12,17 @@ class DatabaseLikedPost {
   static Stream<QuerySnapshot> filterTitle({required String title}) {
     if (title == "") {
       return tblLikedPosts.snapshots();
-    } 
-    else {
+    } else {
       return tblLikedPosts.where('title', isEqualTo: title).snapshots();
     }
+  }
+
+  static Future<void> addLikeData({required cPost post}) async {
+    DocumentReference docref = tblLikedPosts.doc(post.ctitle);
+
+    await docref
+        .set(post.toJson())
+        .whenComplete(() => print("Data Berhasil diinput"))
+        .catchError((e) => print(e));
   }
 }

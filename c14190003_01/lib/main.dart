@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:c14190003_01/dataClass/dcPost.dart';
+import 'package:c14190003_01/pages/details.dart';
 import 'package:c14190003_01/pages/liked.dart';
 import 'package:c14190003_01/services/apiServices.dart';
 import 'package:c14190003_01/services/dbServices.dart';
@@ -49,38 +50,73 @@ class _MyAppState extends State<MyApp> {
       ),
       body: Column(
         children: [
+          // Expanded(
+          //   child: Container(
+          //     child: FutureBuilder<List<cPost>>(
+          //       future: listData,
+          //       builder: (context, snapshot) {
+          //         if (snapshot.hasData) {
+          //           List<cPost> isiData = snapshot.data!;
+          //           return ListView.builder(
+          //             itemCount: isiData.length,
+          //             itemBuilder: (context, index) {
+          //               return Card(
+          //                 child: ListTile(
+          //                   title: Text(isiData[index].ctitle),
+          //                   leading: CircleAvatar(
+          //                     backgroundImage:
+          //                         NetworkImage(isiData[index].cthumbnail),
+          //                   ),
+          //                   subtitle: Text(isiData[index].cpubDate),
+          //                   onTap: () {
+          //                     //showData(isiData[index].cid);
+          //                   },
+          //                   onLongPress: () {
+          //                     //untuk add data ke like
+          //                   },
+          //                 ),
+          //               );
+          //             },
+          //           );
+          //         } else if (snapshot.hasError) {
+          //           return Text("${snapshot.error}");
+          //         }
+          //         return const CircularProgressIndicator();
+          //       },
+          //     ),
+          //   ),
+          // ),
           Expanded(
             child: Container(
-              child: FutureBuilder<List<cPost>>(
-                future: listData,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<cPost> isiData = snapshot.data!;
-                    return ListView.builder(
-                      itemCount: isiData.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: ListTile(
-                            title: Text(isiData[index].ctitle),
-                            leading: CircleAvatar(
-                              backgroundImage:
-                                  NetworkImage(isiData[index].cthumbnail),
-                            ),
-                            subtitle: Text(isiData[index].cpubDate),
-                            onTap: () {
-                              //showData(isiData[index].cid);
-                            },
-                            onLongPress: () {
-                              //untuk add data ke like
-                            },
-                          ),
-                        );
+              child: ListView.builder(
+                itemCount: cPost.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    child: ListTile(
+                      title: Text(cPost.data[index].ctitle),
+                      leading: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(cPost.data[index].cthumbnail)),
+                      subtitle: Text(cPost.data[index].cpubDate),
+                      onLongPress: () {
+                        //untuk add data ke like database firestore
+                        final dt = cPost(
+                            ctitle: cPost.data[index].ctitle,
+                            cpubDate: cPost.data[index].cpubDate,
+                            cdescription: cPost.data[index].cdescription,
+                            cthumbnail: cPost.data[index].cthumbnail,
+                            clink: cPost.data[index].clink);
+                        DatabaseLikedPost.addLikeData(post: dt);
                       },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  return const CircularProgressIndicator();
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    details(Post: cPost.data[index])));
+                      },
+                    ),
+                  );
                 },
               ),
             ),
